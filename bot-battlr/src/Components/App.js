@@ -1,3 +1,4 @@
+//App.js
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import BotCollection from './BotCollection';
@@ -9,7 +10,7 @@ import FilterBar from './FilterBar';
 function App() {
   const [bots, setBots] = useState([]);
   const [selectedBot, setSelectedBot] = useState(null);
-  const [army, setArmy] = useState([]);
+  const [army, setArmy] = useState([]); // Initialize 'army' as an empty array
   const [sortType, setSortType] = useState('health');
   const [selectedClasses, setSelectedClasses] = useState([]);
 
@@ -81,11 +82,15 @@ function App() {
             selectedClasses={selectedClasses}
             toggleClassFilter={toggleClassFilter}
           />
-          <YourBotArmy army={army} releaseFromArmy={releaseFromArmy} />
+          <div className='bots bg-success'> 
+          <YourBotArmy army={army} releaseFromArmy={releaseFromArmy} /></div>
+          
+          
           <BotCollection
             bots={bots}
             addToArmy={addToArmy}
             setSelectedBot={setSelectedBot}
+            army={army}
           />
         </>
       )}
