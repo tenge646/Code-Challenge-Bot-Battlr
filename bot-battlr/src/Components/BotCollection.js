@@ -6,7 +6,7 @@ function BotCollection() {
 
   useEffect(() => {
     // Fetch bot data from your JSON server
-    axios.get(' http://localhost:4444/bots')
+    axios.get('http://localhost:4444/bots')
       .then((response) => {
         setBots(response.data);
       })
@@ -15,11 +15,26 @@ function BotCollection() {
       });
   }, []);
 
-  // Implement rendering the list of bots and adding bots to your army here
+  // Function to render a list of bots with complete profiles
+  const renderBots = () => {
+    return bots.map((bot) => (
+      <div key={bot.id} className="bot-profile">
+        <img src={bot.avatar_url} alt={bot.name} />
+        <h3>{bot.name}</h3>
+        <p>Health: {bot.health}</p>
+        <p>Damage: {bot.damage}</p>
+        <p>Armor: {bot.armor}</p>
+        <button>Add to Army</button>
+      </div>
+    ));
+  };
 
   return (
     <div className="BotCollection">
-      {/* Render your bot list here */}
+      <h2>Available Bots</h2>
+      <div className="bot-list">
+        {renderBots()}
+      </div>
     </div>
   );
 }
