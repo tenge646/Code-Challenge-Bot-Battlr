@@ -1,23 +1,96 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import Routes
-
+import React, { useState, useEffect } from 'react';
+import './App.css';
 import BotCollection from './BotCollection';
-import YourBotArmy from './YourBotArmy';
-import BotSpecs from './ BotSpecs' // Update the import path if needed
+import YourBotArmy from './YourBotArmy ';
+import BotSpecs from './ BotSpecs';
+import SortBar from './SortBar';
+import FilterBar from './FilterBar';
 
 function App() {
+  const [bots, setBots] = useState([]);
+  const [selectedBot, setSelectedBot] = useState(null);
+  const [army, setArmy] = useState([]);
+  const [sortType, setSortType] = useState('health');
+  const [selectedClasses, setSelectedClasses] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from the server (http://localhost:4444/bots)
+    fetch('http://localhost:4444/bots')
+      .then((response) => response.json())
+      .then((data) => setBots(data))
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
+
+  const addToArmy = (bot) => {
+    // Check if the bot is not already in the army
+    if (!army.find((b) => b.id === bot.id)) {
+      setArmy([...army, bot]);
+    }
+  };
+
+  const releaseFromArmy = (bot) => {
+    const updatedArmy = army.filter((b) => b.id !== bot.id);
+    setArmy(updatedArmy);
+  };
+
+  const sortBots = (type) => {
+    // Create a copy of the 'bots' array to avoid mutating the state directly
+    const sortedBots = [...bots];
+
+    // Define a sorting function based on the selected 'type'
+    switch (type) {
+      // ...
+    }
+
+    // Update the 'bots' state with the sorted array
+    setBots(sortedBots);
+  };
+
+  const toggleClassFilter = (botClass) => {
+    // Check if the selected class is already in the 'selectedClasses' array
+    if (selectedClasses.includes(botClass)) {
+      // If it's already selected, remove it
+      const updatedSelectedClasses = selectedClasses.filter(
+        (selectedClass) => selectedClass !== botClass
+      );
+      setSelectedClasses(updatedSelectedClasses);
+    } else {
+      // If it's not selected, add it
+      setSelectedClasses([...selectedClasses, botClass]);
+    }
+  };
+
+  const goBackToList = () => {
+    setSelectedBot(null);
+  };
+
   return (
-    <Router>
-      <div className="App">
-        <Routes> {/* Use Routes instead of Switch */}
-          <Route path="/bot/:id" element={<BotSpecs />} />
-          <Route path="/your-bot-army" element={<YourBotArmy />} />
-          <Route path="/" element={<BotCollection />} />
-        </Routes>
-      </div>
-    </Router>
+    <div className="App">
+      <h1>Bot Battlr</h1>
+      {selectedBot ? (
+        <BotSpecs
+          bot={selectedBot}
+          goBackToList={goBackToList}
+          enlistBot={addToArmy}
+        />
+      ) : (
+        <>
+          <SortBar sortBots={sortBots} />
+          <FilterBar
+            botClasses={["Support", "Medic", "Assault", "Defender", "Captain", "Witch"]}
+            selectedClasses={selectedClasses}
+            toggleClassFilter={toggleClassFilter}
+          />
+          <YourBotArmy army={army} releaseFromArmy={releaseFromArmy} />
+          <BotCollection
+            bots={bots}
+            addToArmy={addToArmy}
+            setSelectedBot={setSelectedBot}
+          />
+        </>
+      )}
+    </div>
   );
 }
 
 export default App;
-

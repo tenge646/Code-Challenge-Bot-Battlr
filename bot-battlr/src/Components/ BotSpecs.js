@@ -1,15 +1,22 @@
+// BotSpecs.js
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-function BotSpecs() {
-  // Implement showing the details of a bot and allowing enlistment here
-
+function BotSpecs(props) {
   return (
-    <div className="BotSpecs">
-      {/* Render bot details and enlist button */}
-      <Link to="/">Go back to bot list</Link>
+    <div>
+      <h2>Bot Details</h2>
+      <div>
+        <h3>{props.bot.name}</h3>
+        <p>Health: {props.bot.health}</p>
+        <p>Damage: {props.bot.damage}</p>
+        <p>Armor: {props.bot.armor}</p>
+        <p>Class: {props.bot.bot_class}</p>
+        <button onClick={() => props.goBackToList()}>Back to List</button>
+        <button onClick={() => props.enlistBot(props.bot)}>Enlist</button>
+      </div>
     </div>
   );
 }
 
 export default BotSpecs;
+

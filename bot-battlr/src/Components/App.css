@@ -1,0 +1,16 @@
+.bot-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.bot-profile {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.bot-profile img {
+  max-width: 100%;
+  height: auto;
+}
