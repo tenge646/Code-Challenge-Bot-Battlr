@@ -59,7 +59,7 @@ function YourBotArmy(props) {
   return (
     <div className='container'>
       <div className='army bg-white'>
-        <h2>Your Bot Army</h2>
+        <h2 className='text-center'>Your Bot Army</h2>
       </div>
       <div className='row'>
         {props.army.map((bot) => (
