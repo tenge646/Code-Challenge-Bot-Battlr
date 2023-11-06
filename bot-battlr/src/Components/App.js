@@ -1,21 +1,20 @@
-//App.js
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import BotCollection from './BotCollection';
 import YourBotArmy from './YourBotArmy ';
-import BotSpecs from './ BotSpecs';
+import BotSpecs from './BotSpecs';
 import SortBar from './SortBar';
 import FilterBar from './FilterBar';
 
 function App() {
   const [bots, setBots] = useState([]);
   const [selectedBot, setSelectedBot] = useState(null);
-  const [army, setArmy] = useState([]); // Initialize 'army' as an empty array
+  const [army, setArmy] = useState([]);
   const [sortType, setSortType] = useState('health');
   const [selectedClasses, setSelectedClasses] = useState([]);
 
   useEffect(() => {
-    // Fetch data from the server (http://localhost:4444/bots)
+   
     fetch('http://localhost:4444/bots')
       .then((response) => response.json())
       .then((data) => setBots(data))
@@ -23,7 +22,6 @@ function App() {
   }, []);
 
   const addToArmy = (bot) => {
-    // Check if the bot is not already in the army
     if (!army.find((b) => b.id === bot.id)) {
       setArmy([...army, bot]);
     }
@@ -35,28 +33,28 @@ function App() {
   };
 
   const sortBots = (type) => {
-    // Create a copy of the 'bots' array to avoid mutating the state directly
     const sortedBots = [...bots];
 
-    // Define a sorting function based on the selected 'type'
-    switch (type) {
-      // ...
-    }
+    sortedBots.sort((botA, botB) => {
+      switch (type) {
+        case 'health':
+          return botB.health - botA.health;
+        case 'damage':
+          return botB.damage - botA.damage;
+        case 'armor':
+          return botB.armor - botA.armor;
+        default:
+          return 0;
+      }
+    });
 
-    // Update the 'bots' state with the sorted array
     setBots(sortedBots);
   };
 
   const toggleClassFilter = (botClass) => {
-    // Check if the selected class is already in the 'selectedClasses' array
     if (selectedClasses.includes(botClass)) {
-      // If it's already selected, remove it
-      const updatedSelectedClasses = selectedClasses.filter(
-        (selectedClass) => selectedClass !== botClass
-      );
-      setSelectedClasses(updatedSelectedClasses);
+      setSelectedClasses(selectedClasses.filter((selectedClass) => selectedClass !== botClass));
     } else {
-      // If it's not selected, add it
       setSelectedClasses([...selectedClasses, botClass]);
     }
   };
@@ -67,7 +65,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Bot Battlr</h1>
+      <h1 className='text-center'>Bot Battlr</h1>
       {selectedBot ? (
         <BotSpecs
           bot={selectedBot}
@@ -82,14 +80,12 @@ function App() {
             selectedClasses={selectedClasses}
             toggleClassFilter={toggleClassFilter}
           />
-          <div className='bots bg-success'> 
-          <YourBotArmy army={army} releaseFromArmy={releaseFromArmy} /></div>
-          
-          
+          <YourBotArmy army={army} releaseFromArmy={releaseFromArmy} />
           <BotCollection
             bots={bots}
             addToArmy={addToArmy}
             setSelectedBot={setSelectedBot}
+            selectedClasses={selectedClasses} // Pass the selectedClasses for filtering
             army={army}
           />
         </>

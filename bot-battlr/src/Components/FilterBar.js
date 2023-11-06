@@ -3,7 +3,7 @@ import React from 'react';
 
 function FilterBar(props) {
   return (
-    <div>
+    <div className='text-center'>
       <label>Filter by Class:</label>
       {props.botClasses.map((botClass) => (
         <label key={botClass}>

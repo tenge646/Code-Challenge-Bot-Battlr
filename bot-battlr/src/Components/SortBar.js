@@ -3,7 +3,7 @@ import React from 'react';
 
 function SortBar(props) {
   return (
-    <div>
+    <div className='text-center'>
       <label>Sort by:</label>
       <select onChange={(e) => props.sortBots(e.target.value)}>
         <option value="health">Health</option>
